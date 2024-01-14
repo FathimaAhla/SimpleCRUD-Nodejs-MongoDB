@@ -27,6 +27,10 @@ app.get('/',async (req,res)=>{
         edit_book = await collection.findOne({_id: new ObjectID(edit_id)})
     }
 
+    if(req.query.delete_id){
+        await collection.deleteOne({_id: new ObjectID(req.query.delete_id)});
+        return res.redirect('/?status=3');
+    }
 
     switch (req.query.status) {
             case 1:
@@ -37,6 +41,9 @@ app.get('/',async (req,res)=>{
                 message = "Updated  Successfully";
                 break;
 
+            case 3:
+                message = "Deleted  Successfully";
+                break;
 
             default:
                 break;
