@@ -20,19 +20,29 @@ app.get('/',async (req,res)=>{
     let book = await cursor.toArray();
 
     let message = '';
-    
+    let edit_id, edit_book;
+
+    if(req.query.edit_id){
+        edit_id = req.query.edit_id
+        edit_book = await collection.findOne({_id: new ObjectID(edit_id)})
+    }
+
 
     switch (req.query.status) {
             case 1:
                 message = "Inserted Successfully";
                 break;
             
+            case 2:
+                message = "Updated  Successfully";
+                break;
+
 
             default:
                 break;
     }
 
-    res.render('main',{message, book})
+    res.render('main',{message, book, edit_id, edit_book })
 })
 
 app.post('/store_book', async(req, res) => {
@@ -41,6 +51,20 @@ app.post('/store_book', async(req, res) => {
     let book = { title: req.body.title, author: req.body.author };
     await collection.insertOne(book);
     return res.redirect('/?status=1');
+})
+
+app.post('/update_book/:edit_id', async(req, res) => {
+    let database = await dbo.getDatabase();
+    const collection = database.collection('book');
+    let book = { title: req.body.title, author: req.body.author };
+    let edit_id = req.params.edit_id;
+    // Check if edit_id is a valid ObjectId
+    if (!ObjectID.isValid(edit_id)) {
+        return res.status(400).send('Invalid ObjectId');
+    }
+
+    await collection.updateOne({ _id: new ObjectID(edit_id) }, { $set: book });
+    return res.redirect('/?status=2');
 })
 
 app.listen(8000,()=>{console.log('Listening to 8000 port');})
