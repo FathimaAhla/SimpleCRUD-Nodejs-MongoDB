@@ -22,9 +22,25 @@ app.get('/',async (req,res)=>{
     let message = '';
     
 
-    res.render('main',{message })
+    switch (req.query.status) {
+            case 1:
+                message = "Inserted Successfully";
+                break;
+            
+
+            default:
+                break;
+    }
+
+    res.render('main',{message, book})
 })
 
-
+app.post('/store_book', async(req, res) => {
+    let database = await dbo.getDatabase();
+    const collection = database.collection('book');
+    let book = { title: req.body.title, author: req.body.author };
+    await collection.insertOne(book);
+    return res.redirect('/?status=1');
+})
 
 app.listen(8000,()=>{console.log('Listening to 8000 port');})
