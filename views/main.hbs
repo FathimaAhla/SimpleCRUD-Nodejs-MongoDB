@@ -9,7 +9,29 @@
 
     <h1>MongoDB CRUD</h1>
     {{message}}
+    <br>
+
     
+
+    <br>
+    <h3>Create</h3>
+    <form method="post" action="/store_book">
+        <label for="">Title</label>
+        <input type="text" name="title">
+        <label for="">Author</label>
+        <input type="text" name="author">
+        <input type="submit">
+    </form><br><br>
+
+    
+    
+    <ul>
+        {{#each book }}
+
+        <li>{{this.title}} - {{this.author}} </li>
+
+        {{/each}}
+    </ul>
 
 </body>
 </html>
