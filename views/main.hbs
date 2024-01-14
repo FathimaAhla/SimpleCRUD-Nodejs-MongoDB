@@ -11,7 +11,16 @@
     {{message}}
     <br>
 
-    
+    {{#if edit_id}}
+    <h3>Edit</h3>
+    <form method="post" action="/update_book/${edit_id}">
+        <label for="">Title</label>
+        <input type="text" name="title" value="{{edit_book.title}}">
+        <label for="">Author</label>
+        <input type="text" name="author" value="{{edit_book.author}}">
+        <input type="submit">
+    </form><br><br>
+    {{else}}
 
     <br>
     <h3>Create</h3>
@@ -23,12 +32,12 @@
         <input type="submit">
     </form><br><br>
 
-    
+    {{/if}}
     
     <ul>
         {{#each book }}
 
-        <li>{{this.title}} - {{this.author}} </li>
+        <li>{{this.title}} - {{this.author}} <a href="/?edit_id={{this._id}}">Edit</a> </li>
 
         {{/each}}
     </ul>
